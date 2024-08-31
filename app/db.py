@@ -1,15 +1,9 @@
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
-from sqlalchemy.orm import DeclarativeBase
 from fastapi_users.db import SQLAlchemyUserDatabase
 from typing import AsyncGenerator
 from fastapi import Depends
 from app.config import settings
-from app.models import User  
-
-
-class Base(DeclarativeBase):
-    pass
-
+from app.models import User, Base
 
 engine = create_async_engine(settings.database_url, echo=True)
 async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
