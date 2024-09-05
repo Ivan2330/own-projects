@@ -11,13 +11,13 @@ from datetime import timedelta
 
 router = APIRouter()
 
-# Додавання стандартних роутів для аутентифікації
+
 router.include_router(fastapi_users.get_auth_router(auth_backend), prefix="/auth/jwt", tags=["auth"])
 router.include_router(fastapi_users.get_register_router(UserRead, UserUpdate), prefix="/auth", tags=["auth"])
 router.include_router(fastapi_users.get_reset_password_router(), prefix="/auth", tags=["auth"])
 router.include_router(fastapi_users.get_verify_router(UserRead), prefix="/auth", tags=["auth"])
 
-# Додавання стандартних роутів для роботи з користувачами
+
 router.include_router(fastapi_users.get_users_router(UserRead, UserUpdate), prefix="/users", tags=["users"])
 
 @router.post("/auth/jwt/login", tags=["auth"])

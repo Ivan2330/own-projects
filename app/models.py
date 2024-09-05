@@ -47,6 +47,7 @@ class Project(Base):
     project_status = Column(Enum(ProjectProcessStatus), nullable=False)
     project_priority = Column(Enum(ProjectPriority), nullable=False)
     owner_id = Column(UUID, ForeignKey("users_base.id"))
+
     
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
@@ -68,5 +69,3 @@ class Task(Base):
     
     project = relationship("Project", back_populates="tasks")
     assignee = relationship("User", back_populates="tasks")
-
-

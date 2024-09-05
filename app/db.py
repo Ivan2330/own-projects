@@ -5,6 +5,8 @@ from fastapi import Depends
 from app.config import settings
 from app.models import User, Base
 
+
+
 engine = create_async_engine(settings.database_url, echo=True)
 async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
 
@@ -21,5 +23,3 @@ async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
 
 async def get_user_db(session: AsyncSession = Depends(get_async_session)):
     yield SQLAlchemyUserDatabase(session, User)
-
-        
