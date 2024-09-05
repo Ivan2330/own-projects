@@ -3,8 +3,17 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.db import get_db_and_tables
 from app.routers import auth, projects, tasks  # Імпорт ваших роутерів
+from contextlib import asynccontextmanager
 
-app = FastAPI(title="Task Manager API", version="1.0.0")
+
+# Підключення до бази даних та створення таблиць
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await get_db_and_tables()
+    yield
+
+
+app = FastAPI(lifespan=lifespan, title="Task Manager API", version="1.0.0")
 
 # CORS налаштування (якщо ваш фронтенд буде працювати на іншому домені)
 origins = [
@@ -21,17 +30,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Підключення до бази даних та створення таблиць
-@app.on_event("startup")
-async def on_startup():
-    await get_db_and_tables()
-
 # Підключення роутерів
 app.include_router(auth.router, prefix="/api/v1")
 app.include_router(projects.router, prefix="/api/v1")
 app.include_router(tasks.router, prefix="/api/v1")
 
+
 @app.get("/")
 def read_root():
     return {"message": "Welcome to the Task Manager API!"}
-
